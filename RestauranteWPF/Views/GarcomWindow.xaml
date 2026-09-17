@@ -1,0 +1,253 @@
+<Window x:Class="RestauranteWPF.Views.GarcomWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:RestauranteWPF.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:GarcomViewModel}"
+        Title="Restaurante - Tela do Garçom"
+        Width="1240" Height="780" MinWidth="1000" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource CorFundo}"
+        Foreground="{StaticResource CorTexto}"
+        FontFamily="Segoe UI" FontSize="14">
+
+    <!-- Layout geral: produtos à esquerda | resumo e acompanhamento à direita -->
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="340"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ================= COLUNA ESQUERDA ================= -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- título -->
+                <RowDefinition Height="Auto"/> <!-- mesa -->
+                <RowDefinition Height="*"/>    <!-- produtos -->
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Tela do Garçom" Style="{StaticResource TituloTela}" Margin="0,0,0,12"/>
+
+            <!-- Identificação da mesa -->
+            <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,0,12,16">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Mesa:" FontWeight="SemiBold" FontSize="16"
+                               VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <!-- UpdateSourceTrigger=PropertyChanged: o ViewModel recebe cada tecla digitada -->
+                    <TextBox Width="90" MaxLength="3" FontSize="16" Padding="6,4"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding MesaTexto, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="{Binding FaixaMesaTexto}" Style="{StaticResource TextoSecundario}"
+                               VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Os 10 cards de produtos em uma grade de 5 colunas -->
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Produtos}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="5"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <!-- Modelo visual de UM card de produto -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:ProdutoCardViewModel}">
+                            <Border Margin="0,0,12,12">
+                                <!-- Borda azul quando o produto está selecionado (quantidade > 0) -->
+                                <Border.Style>
+                                    <Style TargetType="Border" BasedOn="{StaticResource Card}">
+                                        <Setter Property="BorderBrush" Value="{StaticResource CorPrimaria}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Quantidade}" Value="0">
+                                                <Setter Property="BorderBrush" Value="{StaticResource CorBorda}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+
+                                <StackPanel>
+                                    <!-- Imagem (ou espaço cinza se o arquivo não existir) -->
+                                    <Grid Height="100" Margin="0,0,0,10">
+                                        <Border Background="{StaticResource CorPlaceholder}" CornerRadius="6">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Imagem}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="Sem imagem" Style="{StaticResource TextoSecundario}"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <Image Source="{Binding Imagem}" Stretch="Uniform"
+                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    </Grid>
+
+                                    <!-- Nome e preço -->
+                                    <TextBlock Text="{Binding Nome}" FontWeight="SemiBold"
+                                               HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding Preco, StringFormat=C}" Style="{StaticResource TextoSecundario}"
+                                               HorizontalAlignment="Center" Margin="0,2,0,10"/>
+
+                                    <!-- Controle de quantidade: [-] 0 [+] -->
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Content="−" ToolTip="Diminuir"
+                                                Style="{StaticResource BotaoQuantidade}"
+                                                Command="{Binding DiminuirCommand}"/>
+                                        <TextBlock Text="{Binding Quantidade}" Width="40"
+                                                   FontSize="16" FontWeight="SemiBold"
+                                                   TextAlignment="Center" VerticalAlignment="Center"/>
+                                        <Button Content="+" ToolTip="Aumentar"
+                                                Style="{StaticResource BotaoQuantidade}"
+                                                Command="{Binding AumentarCommand}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ================= COLUNA DIREITA ================= -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>    <!-- resumo -->
+                <RowDefinition Height="16"/>
+                <RowDefinition Height="220"/>  <!-- acompanhamento -->
+            </Grid.RowDefinitions>
+
+            <!-- Resumo do pedido -->
+            <Border Grid.Row="0" Style="{StaticResource Card}" Padding="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- título -->
+                        <RowDefinition Height="*"/>    <!-- itens -->
+                        <RowDefinition Height="Auto"/> <!-- total -->
+                        <RowDefinition Height="Auto"/> <!-- botão -->
+                        <RowDefinition Height="Auto"/> <!-- mensagem -->
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Resumo do pedido" Style="{StaticResource TituloSecao}"/>
+
+                    <!-- Aviso quando nada foi selecionado -->
+                    <TextBlock Grid.Row="1" Text="Use o botão + nos produtos para montar o pedido."
+                               TextWrapping="Wrap">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextoSecundario}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ItensSelecionados.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <!-- Lista: quantidade x produto | preço unitário | subtotal -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding ItensSelecionados}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:ProdutoCardViewModel}">
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding TextoResumo}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Preco, StringFormat='{}{0:C} cada'}"
+                                                       Style="{StaticResource TextoSecundario}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" Text="{Binding Subtotal, StringFormat=C}"
+                                                   VerticalAlignment="Top"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Total -->
+                    <Border Grid.Row="2" BorderBrush="{StaticResource CorBorda}"
+                            BorderThickness="0,1,0,0" Padding="0,10,0,0" Margin="0,8,0,0">
+                        <Grid>
+                            <TextBlock Text="TOTAL" FontWeight="Bold" FontSize="16"/>
+                            <TextBlock Text="{Binding Total, StringFormat=C}" FontWeight="Bold" FontSize="18"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Botão de envio (desabilita sozinho enquanto envia) -->
+                    <Button Grid.Row="3" Height="46" Margin="0,14,0,0" FontSize="15"
+                            Style="{StaticResource BotaoPrimario}"
+                            Content="{Binding TextoBotaoEnviar}"
+                            Command="{Binding EnviarPedidoCommand}"/>
+
+                    <!-- Mensagem de sucesso ou erro -->
+                    <Border Grid.Row="4" Margin="0,12,0,0" Style="{StaticResource CaixaMensagem}">
+                        <TextBlock Text="{Binding Mensagem}" TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource CorSucesso}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding MensagemEhErro}" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource CorErro}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Acompanhamento (atualizado pelo Realtime) -->
+            <Border Grid.Row="2" Style="{StaticResource Card}" Padding="16">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Pedidos em andamento" Style="{StaticResource TituloSecao}"/>
+
+                    <TextBlock DockPanel.Dock="Top" Text="Nenhum pedido em andamento.">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextoSecundario}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PedidosEmAndamento.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding PedidosEmAndamento}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:PedidoCardViewModel}">
+                                    <Grid Margin="0,0,0,8">
+                                        <TextBlock VerticalAlignment="Center">
+                                            <Run Text="{Binding Titulo, Mode=OneWay}" FontWeight="SemiBold"/>
+                                            <Run Text="  "/>
+                                            <Run Text="{Binding MesaTexto, Mode=OneWay}" Foreground="{StaticResource CorTextoSecundario}"/>
+                                        </TextBlock>
+                                        <Border Style="{StaticResource SeloStatus}" HorizontalAlignment="Right">
+                                            <TextBlock Text="{Binding Status}" Style="{StaticResource TextoSelo}"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

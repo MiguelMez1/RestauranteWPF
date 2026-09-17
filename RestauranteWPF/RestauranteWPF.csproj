@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Configuração do projeto: aplicativo WPF para Windows em .NET 8 -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>RestauranteWPF</RootNamespace>
+    <AssemblyName>RestauranteWPF</AssemblyName>
+  </PropertyGroup>
+
+  <!-- Biblioteca oficial do Supabase para C# (banco + Realtime) -->
+  <ItemGroup>
+    <PackageReference Include="Supabase" Version="1.1.1" />
+  </ItemGroup>
+
+  <!-- Copia as imagens dos produtos para a pasta de saída (bin) -->
+  <ItemGroup>
+    <None Update="Imagens\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
