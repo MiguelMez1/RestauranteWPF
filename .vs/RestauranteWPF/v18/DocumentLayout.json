@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\WINDOWS\\Desktop\\RestauranteWPF\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6B1E2A4C-3D5F-4E7A-9B8C-1A2B3C4D5E6F}|RestauranteWPF\\RestauranteWPF.csproj|c:\\users\\windows\\desktop\\restaurantewpf\\restaurantewpf\\supabaseconfig1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6B1E2A4C-3D5F-4E7A-9B8C-1A2B3C4D5E6F}|RestauranteWPF\\RestauranteWPF.csproj|solutionrelative:restaurantewpf\\supabaseconfig1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SupabaseConfig1.cs",
+              "DocumentMoniker": "C:\\Users\\WINDOWS\\Desktop\\RestauranteWPF\\RestauranteWPF\\SupabaseConfig1.cs",
+              "RelativeDocumentMoniker": "RestauranteWPF\\SupabaseConfig1.cs",
+              "ToolTip": "C:\\Users\\WINDOWS\\Desktop\\RestauranteWPF\\RestauranteWPF\\SupabaseConfig1.cs",
+              "RelativeToolTip": "RestauranteWPF\\SupabaseConfig1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-16T23:25:29.185Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
