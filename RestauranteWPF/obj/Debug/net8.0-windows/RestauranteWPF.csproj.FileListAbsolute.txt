@@ -53,3 +53,4 @@ C:\Users\WINDOWS\Desktop\RestauranteWPF\RestauranteWPF\obj\Debug\net8.0-windows\
 C:\Users\WINDOWS\Desktop\RestauranteWPF\RestauranteWPF\obj\Debug\net8.0-windows\RestauranteWPF.pdb
 C:\Users\WINDOWS\Desktop\RestauranteWPF\RestauranteWPF\obj\Debug\net8.0-windows\RestauranteWPF.genruntimeconfig.cache
 C:\Users\WINDOWS\Desktop\RestauranteWPF\RestauranteWPF\obj\Debug\net8.0-windows\ref\RestauranteWPF.dll
+C:\Users\WINDOWS\Desktop\RestauranteWPF\RestauranteWPF\obj\Debug\net8.0-windows\RestauranteWPF.sourcelink.json
